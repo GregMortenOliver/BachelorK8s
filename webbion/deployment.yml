@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webbion
+  labels:
+    app: webbion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webbion
+  template:
+    metadata:
+      labels:
+        app: webbion
+    spec:
+      containers:
+        - name: webbion
+          image: nginx:latest
+          ports:
+            - containerPort: 80
