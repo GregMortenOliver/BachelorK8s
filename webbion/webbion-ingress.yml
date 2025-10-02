@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: argo.webbion.dk
+    - host: webbion.dk
       http:
         paths:
           - path: /
