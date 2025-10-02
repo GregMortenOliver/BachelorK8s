@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: webbion.dk
+    - host: argo.webbion.dk
       http:
         paths:
           - path: /
@@ -17,3 +17,4 @@ spec:
                 name: webbion-service
                 port:
                   number: 80
+
