@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webbion-web-app
+  labels:
+    app: webbion-web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webbion-web-app
+  template:
+    metadata:
+      labels:
+        app: webbion-web-app
+    spec:
+      containers:
+        - name: webbion-web-app
+          image: ghcr.io/gregmortenoliver/webbion:latest
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: github-registry
