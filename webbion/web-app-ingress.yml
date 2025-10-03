@@ -17,4 +17,3 @@ spec:
                 name: webbion-web-app-service
                 port:
                   number: 80
-   
