@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: argo.tail732e1e.ts.net
+    - host: webbion.tail732e1e.ts.net
       http:
         paths:
           - path: /
