@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
 data:
   server.insecure: "true"
-  server.rootpath: "/"
+  server.rootpath: "/argocd"
   server.grpc.web: "true"
   application.instanceLabelKey: "argocd.argoproj.io/instance"
 ---
@@ -21,7 +21,7 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
 data:
-  url: "http://argo.tail732e1e.ts.net:30080"
+  url: "http://argo.tail732e1e.ts.net/argocd"
   application.instanceLabelKey: "argocd.argoproj.io/instance"
   server.rbac.log.enforce.enable: "false"
   exec.enabled: "false"
