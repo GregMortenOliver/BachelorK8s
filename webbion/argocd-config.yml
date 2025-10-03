@@ -6,3 +6,25 @@ metadata:
 data:
   server.insecure: "true"
   server.basehref: /
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  url: "http://argo.tail732e1e.ts.net:30080"
+  application.instanceLabelKey: argocd.argoproj.io/instance
+  server.rbac.log.enforce.enable: "false"
+  exec.enabled: "false"
+  admin.enabled: "true"
+  timeout.reconciliation: "180s"
+  ingress.class: "nginx"
+  ingress.annotations: |
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  resource.customizations: |
+    networking.k8s.io/Ingress:
+      health.lua: |
+        hs = {}
+        hs.status = "Healthy"
+        return hs
