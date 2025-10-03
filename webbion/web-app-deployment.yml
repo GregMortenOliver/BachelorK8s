@@ -4,10 +4,6 @@ metadata:
   name: webbion-web-app
   labels:
     app: webbion-web-app
-  annotations:
-    argocd-image-updater.argoproj.io/image-list: webbion=ghcr.io/gregmortenoliver/webbion
-    argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/git-branch: main
 spec:
   replicas: 1
   selector:
