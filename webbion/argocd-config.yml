@@ -6,11 +6,3 @@ metadata:
 data:
   server.insecure: "true"
   server.basehref: /
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: argocd-cm
-  namespace: argocd
-data:
-  url: "http://argo.tail732e1e.ts.net:30080"
