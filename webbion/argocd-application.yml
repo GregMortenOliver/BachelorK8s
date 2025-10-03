@@ -1,19 +1,21 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: webbion
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/gregmortenoliver/BachelorK8s.git
-    targetRevision: HEAD
-    path: webbion
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: default
-  syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
-    - PruneLast=true
-    - ApplyOutOfSyncOnly=true
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: webbion
+#   namespace: argocd
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://github.com/gregmortenoliver/BachelorK8s.git
+#     targetRevision: HEAD
+#     path: webbion
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: default
+#   syncPolicy:
+#     syncOptions:
+#     - CreateNamespace=true
+#     - PruneLast=true
+#     - ApplyOutOfSyncOnly=true
+
+# laver argocd app til
