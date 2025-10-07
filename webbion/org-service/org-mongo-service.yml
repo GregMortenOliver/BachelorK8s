@@ -4,7 +4,7 @@ metadata:
   name: org-mongo-service
   namespace: default
 spec:
-  clusterIP: None
+  type: ClusterIP
   selector:
     app: org-mongo
   ports:
