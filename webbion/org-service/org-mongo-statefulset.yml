@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: org-mongo-statefulset
+spec:
+  serviceName: org-mongo-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: org-mongo
+  template:
+    metadata:
+      labels:
+        app: org-mongo
+    spec:
+      containers:
+        - name: org-mongo
+          image: mongo:latest
+          command: ["mongod", "--bind_ip_all", "--replSet", "rs0"]
+          ports:
+            - containerPort: 27017
+          envFrom:
+            - secretRef:
+                name: mongo-secret
+          volumeMounts:
+            - name: org-mongo-persistent-storage
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: org-mongo-persistent-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 4Gi
