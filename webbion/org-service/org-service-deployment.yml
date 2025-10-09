@@ -24,12 +24,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: org-mongo-secret
-                  key: ORG_MONGO_INITDB_ROOT_USERNAME
+                  key: MONGO_INITDB_ROOT_USERNAME
             - name: MONGO_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: org-mongo-secret
-                  key: ORG_MONGO_INITDB_ROOT_PASSWORD
+                  key: MONGO_INITDB_ROOT_PASSWORD
             - name: MONGO_URL
               value: "mongodb://$(MONGO_USER):$(MONGO_PASSWORD)@org-mongo-clusterip-service:27017/orgdatabase?authSource=admin"
       imagePullSecrets:
