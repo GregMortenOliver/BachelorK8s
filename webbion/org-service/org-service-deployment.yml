@@ -31,6 +31,6 @@ spec:
                   name: org-mongo-secret
                   key: ORG_MONGO_INITDB_ROOT_PASSWORD
             - name: MONGO_URL
-              value: "mongodb://$(MONGO_USER):$(MONGO_PASSWORD)@org-mongo-service:27017/orgdatabase?authSource=admin"
+              value: "mongodb://$(MONGO_USER):$(MONGO_PASSWORD)@org-mongo-service:27017"
       imagePullSecrets:
         - name: boliver
