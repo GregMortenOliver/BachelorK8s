@@ -3,6 +3,7 @@ kind: StatefulSet
 metadata:
   name: org-mongo-statefulset
 spec:
+  # This connects the StatefulSet to the headless service.
   serviceName: org-mongo-service
   replicas: 1
   selector:
@@ -11,20 +12,44 @@ spec:
   template:
     metadata:
       labels:
+        # This label is used by both services to find this pod.
         app: org-mongo
     spec:
       containers:
         - name: org-mongo
           image: mongo:latest
-          args: ["--replSet", "rs0", "--bind_ip_all"]
+          command:
+            - "mongod"
+            - "--bind_ip_all"
+            - "--replSet"
+            - "rs0"
+            # --auth enables security.
+            - "--auth"
+            # --keyFile tells the replica set how to authenticate internally.
+            - "--keyFile"
+            - "/etc/mongo-key/mongo.key"
           ports:
             - containerPort: 27017
           envFrom:
+            # This loads the username and password from the first secret.
             - secretRef:
                 name: org-mongo-secret
           volumeMounts:
+            # Mount for the database data.
             - name: org-mongo-persistent-storage
               mountPath: /data/db
+            # Mount for the keyfile secret.
+            - name: keyfile
+              mountPath: "/etc/mongo-key"
+              readOnly: true
+      volumes:
+        # This volume is created from the keyfile secret.
+        - name: keyfile
+          secret:
+            secretName: org-mongo-keyfile-secret
+            # This sets file permissions to read-only by the owner.
+            defaultMode: 0400
+  # This template creates the PersistentVolumeClaim for our storage.
   volumeClaimTemplates:
     - metadata:
         name: org-mongo-persistent-storage
@@ -32,4 +57,4 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 1Gi
+            storage: 4Gi
