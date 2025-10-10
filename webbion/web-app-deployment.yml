@@ -22,3 +22,6 @@ spec:
           imagePullPolicy: Always
       imagePullSecrets:
         - name: boliver
+      envFrom:
+        - secretRef:
+            name: auth0
