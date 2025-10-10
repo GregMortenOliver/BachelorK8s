@@ -33,18 +33,20 @@ spec:
                   - >
                     sleep 5;
                     mongosh --eval "
-                      const adminDb = db.getSiblingDB('admin');
-                      const userExists = adminDb.runCommand({ usersInfo: { user: '$MONGO_INITDB_ROOT_USERNAME', db: 'admin' } }).users.length > 0;
-                      if (!userExists) {
-                        console.log('User does not exist, creating...');
-                        adminDb.createUser({
+                      try {
+                        db.getSiblingDB('admin').createUser({
                           user: '$MONGO_INITDB_ROOT_USERNAME',
                           pwd: '$MONGO_INITDB_ROOT_PASSWORD',
                           roles: [ { role: 'root', db: 'admin' } ]
                         });
-                        console.log('User created successfully.');
-                      } else {
-                        console.log('User already exists, skipping creation.');
+                        print('User created successfully.');
+                      } catch (e) {
+                        if (e.code === 51003) { // This is the 'UserAlreadyExists' error code
+                          print('User already exists, skipping creation.');
+                        } else {
+                          print('An unexpected error occurred during user creation:');
+                          printjson(e);
+                        }
                       }
                     "
           volumeMounts:
