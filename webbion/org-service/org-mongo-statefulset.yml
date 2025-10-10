@@ -3,7 +3,6 @@ kind: StatefulSet
 metadata:
   name: org-mongo-statefulset
 spec:
-  # serviceName is removed - not needed for a standalone instance.
   replicas: 1
   selector:
     matchLabels:
@@ -16,21 +15,41 @@ spec:
       containers:
         - name: org-mongo
           image: mongo:latest
-          # --- SIMPLIFIED COMMAND ---
           command:
             - "mongod"
             - "--bind_ip_all"
-            # --auth enables username/password security.
             - "--auth"
           ports:
             - containerPort: 27017
           envFrom:
             - secretRef:
                 name: org-mongo-secret
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "sh"
+                  - "-c"
+                  - >
+                    sleep 5;
+                    mongosh --eval '
+                      const adminDb = db.getSiblingDB("admin");
+                      const userExists = adminDb.runCommand({ usersInfo: { user: "$MONGO_INITDB_ROOT_USERNAME", db: "admin" } }).users.length > 0;
+                      if (!userExists) {
+                        console.log("User does not exist, creating...");
+                        adminDb.createUser({
+                          user: "$MONGO_INITDB_ROOT_USERNAME",
+                          pwd: "$MONGO_INITDB_ROOT_PASSWORD",
+                          roles: [ { role: "root", db: "admin" } ]
+                        });
+                        console.log("User created successfully.");
+                      } else {
+                        console.log("User already exists, skipping creation.");
+                      }
+                    '
           volumeMounts:
             - name: org-mongo-persistent-storage
               mountPath: /data/db
-      # No keyfile volume needed anymore.
   volumeClaimTemplates:
     - metadata:
         name: org-mongo-persistent-storage
