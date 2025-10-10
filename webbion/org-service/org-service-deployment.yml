@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: org-service-deployment
+  namespace: default
+  labels:
+    app: org-service-deployment
+spec:
+  selector:
+    matchLabels:
+      app: org-service-deployment
+  template:
+    metadata:
+      labels:
+        app: org-service-deployment
+    spec:
+      containers:
+        - name: org-service-deployment
+          image: ghcr.io/gregmortenoliver/org-service:latest
+          ports:
+            - containerPort: 3002
+          env:
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: org-mongo-secret
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: org-mongo-secret
+                  key: MONGO_INITDB_ROOT_PASSWORD
+            - name: MONGO_URL
+              value: "mongodb://$(MONGO_USER):$(MONGO_PASSWORD)@org-mongo-clusterip-service:27017/admin?authSource=admin"
+      imagePullSecrets:
+        - name: boliver
