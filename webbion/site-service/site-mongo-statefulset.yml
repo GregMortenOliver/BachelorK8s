@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: site-mongo-statefulset
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: site-mongo
+  template:
+    metadata:
+      labels:
+        app: site-mongo
+    spec:
+      containers:
+        - name: site-mongo
+          image: mongo:latest
+          command:
+            - "mongod"
+            - "--bind_ip_all"
+            - "--auth"
+          ports:
+            - containerPort: 27017
+          envFrom:
+            - secretRef:
+                name: site-mongo-secret
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "sh"
+                  - "-c"
+                  - >
+                    sleep 5;
+                    mongosh --eval "
+                      try {
+                        db.getSiblingDB('admin').createUser({
+                          user: '$MONGO_INITDB_ROOT_USERNAME',
+                          pwd: '$MONGO_INITDB_ROOT_PASSWORD',
+                          roles: [ { role: 'root', db: 'admin' } ]
+                        });
+                        print('User created successfully.');
+                      } catch (e) {
+                        if (e.code === 51003) { // This is the 'UserAlreadyExists' error code
+                          print('User already exists, skipping creation.');
+                        } else {
+                          print('An unexpected error occurred during user creation:');
+                          printjson(e);
+                        }
+                      }
+                    "
+          volumeMounts:
+            - name: site-mongo-persistent-storage
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: site-mongo-persistent-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

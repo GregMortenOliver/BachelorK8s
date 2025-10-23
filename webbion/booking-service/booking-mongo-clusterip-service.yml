@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  # This is the stable hostname your Bun app will use in its connection string.
+  name: booking-mongo-clusterip-service
+spec:
+  # 'ClusterIP' is the default type, creating an internal-only IP.
+  type: ClusterIP
+  selector:
+    # This must also match the labels on the MongoDB pods.
+    app: booking-mongo
+  ports:
+    - name: mongo
+      port: 27017
+      targetPort: 27017
