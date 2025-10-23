@@ -18,7 +18,7 @@ spec:
         - name: booking-service-deployment
           image: ghcr.io/gregmortenoliver/booking-service:latest
           ports:
-            - containerPort: 3001
+            - containerPort: 3004
           env:
             - name: MONGO_USER
               valueFrom:
