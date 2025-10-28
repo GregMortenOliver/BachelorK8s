@@ -20,30 +20,29 @@ spec:
           ports:
             - containerPort: 3000
           imagePullPolicy: Always
+          env:
+            - name: PUBLIC_AUTH0_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-id
+                  key: PUBLIC_AUTH0_CLIENT_ID
+
+            - name: PUBLIC_AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-domain
+                  key: PUBLIC_AUTH0_DOMAIN
+
+            - name: PUBLIC_AUTH0_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-audience
+                  key: PUBLIC_AUTH0_AUDIENCE
+
+            - name: PUBLIC_AUTH0_CALLBACK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-callback
+                  key: PUBLIC_AUTH0_CALLBACK_URL
       imagePullSecrets:
         - name: boliver
-      env:
-        - name: PUBLIC_AUTH0_CLIENT_ID
-          valueFrom:
-            secretKeyRef:
-              name: auth0-id
-              key: PUBLIC_AUTH0_CLIENT_ID
-
-        - name: PUBLIC_AUTH0_DOMAIN
-          valueFrom:
-            secretKeyRef:
-              name: auth0-domain
-              key: PUBLIC_AUTH0_DOMAIN
-
-        - name: PUBLIC_AUTH0_AUDIENCE
-          valueFrom:
-            secretKeyRef:
-              name: auth0-audience
-              key: PUBLIC_AUTH0_AUDIENCE
-
-        - name: PUBLIC_AUTH0_CALLBACK_URL
-          valueFrom:
-            secretKeyRef:
-              name: auth0-callback
-              key: PUBLIC_AUTH0_CALLBACK_URL
-
