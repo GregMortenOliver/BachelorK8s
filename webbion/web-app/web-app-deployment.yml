@@ -18,7 +18,7 @@ spec:
         - name: webbion-web-app
           image: ghcr.io/gregmortenoliver/webbion:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 4173
           imagePullPolicy: Always
           env:
             - name: PUBLIC_AUTH0_CLIENT_ID
