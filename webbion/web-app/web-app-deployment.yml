@@ -17,7 +17,7 @@ spec:
       containers:
         - name: webbion-web-app
           image: ghcr.io/gregmortenoliver/webbion:latest
-          command: ["npm", "run", "preview", "--", "--host"]
+          args: ["--host"]
           ports:
             - containerPort: 4173
           imagePullPolicy: Always
